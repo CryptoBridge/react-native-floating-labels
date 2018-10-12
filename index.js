@@ -14,6 +14,11 @@ import {
 export default class FloatingLabel extends Component {
     state = {};
 
+    fields = {
+        label: null,
+        textinput: null
+    };
+
     constructor(props) {
         super(props);
 
@@ -108,10 +113,20 @@ export default class FloatingLabel extends Component {
         }
     };
 
+    _handleSubmitEditing = (event) => {
+        if (this.props.onSubmitEditing) {
+            this.props.onSubmitEditing(event)
+        }
+    }
+
+    focus = () => {
+        this.fields['textinput'].focus();
+    }
+
     _renderLabel = () => {
         return (
             <Animated.Text
-                ref='label'
+                ref={(element) => { this.fields.label = element; }}
                 style={[this.state.labelStyle, styles.label, this.props.labelStyle]}
             >
                 {this.props.label}
@@ -125,6 +140,7 @@ export default class FloatingLabel extends Component {
             onBlur: this._handleBlur,
             onChangeText: this._handleChangeText,
             onEndEditing: this._handleEndEditing,
+            onSubmitEditing: this._handleSubmitEditing,
             onFocus: this._onFocus,
             style: [
                 styles.input,
@@ -137,6 +153,7 @@ export default class FloatingLabel extends Component {
             <View style={elementStyles}>
                 {this._renderLabel()}
                 <TextInput
+                    ref={(element) => { this.fields.textinput = element; }}
                     {...props}
                 >
                 </TextInput>
